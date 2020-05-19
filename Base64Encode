@@ -1,0 +1,54 @@
+Function Base64EncodeString(ByVal sText As String) As String
+    Dim byt() As Byte
+    
+    byt = VBA.StrConv(sText, VbStrConv.vbFromUnicode, 1033)
+    
+    Base64EncodeString = Base64EncodeFromBytes(byt)
+End Function
+
+Function Base64EncodeFromBytes(ByRef byt() As Byte) As String
+
+    Dim oXML  As MSXML2.DOMDocument60
+    Set oXML = New MSXML2.DOMDocument60
+    
+    Dim oNode As MSXML2.IXMLDOMNode
+
+    Set oNode = oXML.createElement("base64")
+    oNode.DataType = "bin.base64"
+    
+    oNode.nodeTypedValue = byt
+    Base64EncodeFromBytes = oNode.Text
+    
+    Debug.Assert TypeName(Base64EncodeFromBytes) = "String"
+    Set oNode = Nothing
+    Set oXML = Nothing
+End Function
+
+Function Base64DecodeString(ByVal sText As String) As String
+
+    Dim byt() As Byte
+    byt = Base64DecodeToBytes(sText)
+    
+
+    Base64DecodeString = VBA.StrConv(byt(), VbStrConv.vbUnicode, 1033)
+
+End Function
+
+Function Base64DecodeToBytes(ByVal sEncoded As String) As Byte()
+    
+    Debug.Assert TypeName(sEncoded) = "String"
+    
+    Dim oXML  As MSXML2.DOMDocument60
+    Set oXML = New MSXML2.DOMDocument60
+    
+    Dim oNode As MSXML2.IXMLDOMNode
+    Set oNode = oXML.createElement("base64")
+    
+    oNode.DataType = "bin.base64"
+    oNode.Text = sEncoded
+    
+    Base64DecodeToBytes = oNode.nodeTypedValue
+    
+    Set oNode = Nothing
+    Set oXML = Nothing
+End Function
