@@ -1,0 +1,23 @@
+Private Sub callAPI()
+
+' VBA project Reference required:
+' Microsoft XML, v6.0
+
+Dim xmlHTTP As New MSXML2.XMLHTTP60
+Dim myURL As String
+Dim user As String
+Dim password As String
+
+user = "someusername"
+password = "somepassword"
+myURL = "[Insert URL]"
+
+' Use this for basic authentication
+xmlHTTP.setRequestHeader "Authorization", "Basic " + (user + ":" + password) 'Base64EncodeString(user + ":" + password)
+
+xmlHTTP.Open "GET", myURL, False
+xmlHTTP.send
+
+MsgBox (xmlHTTP.responseText)
+
+End Sub
